@@ -448,7 +448,10 @@ class ImageFolderDataset(Dataset):
         # raw_shape = [len(self._image_fnames)] + list(self._load_raw_image(0).shape)
         # if resolution is not None and (raw_shape[2] != resolution or raw_shape[3] != resolution):
         #     raise IOError('Image files do not match the specified resolution')
-        super().__init__(name=name, raw_shape=self._raw_shape, **super_kwargs)
+        print(name,self._raw_shape,super_kwargs)
+        print(super)
+        super().__init__()
+        # super().__init__(name=name, raw_shape=self._raw_shape, **super_kwargs)
 
     @staticmethod
     def _file_ext(fname):
@@ -457,7 +460,10 @@ class ImageFolderDataset(Dataset):
 
     def _open_file(self, fname):
         if self._type == 'dir':
-            return open(os.path.join(self._path, fname), 'rb')
+            try:
+                return open(fname, 'rb')
+            except:
+                return open(os.path.join(self._path, fname), 'rb')
         if self._type == 'zip':
             return self._get_zipfile().open(fname, 'r')
         return None

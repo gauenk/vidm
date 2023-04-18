@@ -1,4 +1,4 @@
-DATASETS = 'data/CLEVRER'
+DATASETS = 'data/'
 EXPERIMENTS = 'experiment'
 import os
 import builtins
@@ -22,8 +22,10 @@ import torch.utils.data.distributed
 from torch.utils.tensorboard import SummaryWriter
 from torchvision.utils import make_grid
 
-from dddpm.net import ComplexUModel
-from dddpm.mydataset import ImageFolderDataset
+from vidm.original import ComplexUModel
+from vidm.original import ImageFolderDataset
+# from dddpm.net import ComplexUModel
+# from dddpm.mydataset import ImageFolderDataset
 from guided_diffusion.script_util import create_gaussian_diffusion
 
 parser = argparse.ArgumentParser(description="Major options for PyAnole")
@@ -39,12 +41,16 @@ parser.add_argument(
 parser.add_argument("--gpu", default=None, type=int, help="GPU id to use.")
 parser.add_argument(
     "--world-size",
-    default=-1,
+    # default=-1,
+    default=1,
     type=int,
     help="number of nodes for distributed training",
 )
 parser.add_argument(
-    "--rank", default=-1, type=int, help="node rank for distributed training"
+    "--rank",
+    # default=-1,
+    default=0,
+    type=int, help="node rank for distributed training"
 )
 parser.add_argument(
     "--dist-url",
@@ -65,14 +71,16 @@ parser.add_argument(
 )
 parser.add_argument(
     "--workers",
-    default=32,
+    # default=32,
+    default=2,
     type=int,
     metavar="N",
     help="number of data loading workers (default: 32)",
 )
 parser.add_argument(
     "--batch-size",
-    default=256,
+    # default=256,
+    default=4,
     type=int,
     metavar="N",
     help="mini-batch size (default: 256), this is the total "
@@ -235,7 +243,7 @@ def main_worker(gpu, ngpus_per_node, args):
         torch.cuda.set_device(args.gpu)
         model = model.cuda(args.gpu)
         # comment out the following line for debugging
-        raise NotImplementedError("Only DistributedDataParallel is supported.")
+        # raise NotImplementedError("Only DistributedDataParallel is supported.")
     else:
         # AllGather implementation (batch shuffle, queue update, etc.) in
         # this code only supports DistributedDataParallel.
@@ -261,7 +269,7 @@ def main_worker(gpu, ngpus_per_node, args):
             )
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
-    
+
     cudnn.benchmark = True
 
     # Data loading code

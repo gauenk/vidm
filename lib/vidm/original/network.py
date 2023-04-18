@@ -3,9 +3,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from vidm.cunet import UNetModel
-from vidm.encoder import EncoderUNetModel
+from .encoder import EncoderUNetModel
 
-from mmedit.models.backbones.sr_backbones.basicvsr_net import SPyNet
+from vrt.original.network_vrt import SpyNet as SPyNet
+# from mmedit.models.backbones.sr_backbones.basicvsr_net import SPyNet
 
 class ConstantInput(nn.Module):
     def __init__(self, channel, size=4):
@@ -75,6 +76,7 @@ class ComplexUModel(nn.Module):
             video_timesteps=video_timesteps,
         )
         
+        print(spynet_pretrained)
         self.spynet = SPyNet(pretrained=spynet_pretrained)
 
     def forward(self, x, dt, vt, x_mins_1, x_0):

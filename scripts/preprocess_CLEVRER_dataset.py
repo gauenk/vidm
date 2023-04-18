@@ -6,7 +6,7 @@ from tqdm import tqdm
 path_list = ['data/CLEVRER/train_vid/', 'data/CLEVRER/val_vid/']
 save_path_list = ['data/CLEVRER/train', 'data/CLEVRER/val' ]
 
-for i in range(2)[1:]:
+for i in range(2)[:1]:
     path = path_list[i]
     save_path = save_path_list[i]
 
